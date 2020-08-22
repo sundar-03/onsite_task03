@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+<style type="text/css">
+	
+		#image_area
+    {
+    	width: 500px;
+    	height:500px;
+    	position: absolute;
+    	margin-left: auto;
+    	margin-right: auto;
+    	left: 0;
+    	right: 0;
+    	border: 2px solid black;
+    	overflow: hidden;
+    }
+    #menu
+    {
+    	text-align: center;
+    }
+    #container
+	{
+		width: 300px;
+		margin: 0px auto;
+		text-align: center;
+	}
+    .input
+    {
+    	width: 92%;
+    	padding: 2%;
+    }
+		</style>
+		<script src="jquery-3.5.1.min.js"></script>
+		<script src="myscript.js"></script>
+</head>
+<body>
+	<div id="menu">
+		<button onclick="crop()">
+			CROP
+		</button>
+		<button onclick="drag()">
+			DRAG
+		</button>
+	</div>
+	<br>
+	<br>
+	<div id="container">
+	<form method="post">
+<input type="text" name="imagename" list="savedimages" placeholder="Enter the image name here " onchange="myfunc(this.value)" class="input"  id="imagename" required>
+<datalist id="savedimages">
+	
+</datalist>
+<br><br>
+<input type="submit" name="submit"  value="Submit" >
+</form>
+</div>
+<br>
+<br>
+</body>
+</html>
+	<?php
+	$con = mysqli_connect("localhost","root","");
+	mysqli_select_db($con,'image_project');
+if(isset($_POST['submit']))
+{
+  $imagename=$_POST['imagename'];
+		  $q="SELECT * FROM images WHERE image_name='".$imagename."' ";
+         $r=mysqli_query($con,$q);
+         $row = mysqli_fetch_assoc($r);
+         $imageurl = $row['image_list'];
+         ?>
+        <div id="image_area">
+	<img src="<?php echo($imageurl) ?>" id = "image" width="500px" height="500px">
+					</div>
+		<?php
+	}
+
+ ?>
+<script type="text/javascript">
+var a,b,k=0,x,y;
+	function crop() {
+		// body...
+		x = window.prompt("Enter the no of pixels to move right. For left enter the negative value ",10);
+		y = window.prompt("Enter the no of pixels to move bottom. For top enter the negative value ",10);
+		document.getElementById("image").style.marginTop = y +"px";
+		document.getElementById("image").style.marginLeft = x +"px";
+	}
+	function drag()
+	{
+		a = window.prompt("Enter the width ",10);
+		b = window.prompt("Enter the height ",10);
+		document.getElementById("image").style.width=a+"px";
+		document.getElementById("image").style.height=b+"px";
+		document.getElementById("image_area").style.width=a+"px";
+		document.getElementById("image_area").style.height=b+"px";
+	}
+</script>
